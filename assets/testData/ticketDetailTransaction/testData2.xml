@@ -1,0 +1,31 @@
+<issue>
+    <id>294</id>
+    <project name="交流の場" id="5"/>
+    <tracker name="サポート" id="3"/>
+    <status name="新規" id="1"/>
+    <priority name="通常" id="4"/>
+    <author name="川嶋 秀一" id="1"/>
+    <subject>テスト1</subject>
+    <description>テスト1詳細</description>
+    <start_date>2013-11-18</start_date>
+    <due_date/>
+    <done_ratio>0</done_ratio>
+    <estimated_hours/>
+    <spent_hours>0.0</spent_hours>
+    <created_on>2013-11-18T21:32:02+09:00</created_on>
+    <updated_on>2014-01-11T12:50:42+09:00</updated_on>
+    <journals type="array">
+        <journal id="2509">
+            <user name="松本 優二" id="3"/>
+            <notes>あれば使うかもしれませんが、人数が少ないのでなかなか利用する機会はないかもしれませんね。</notes>
+            <created_on>2013-11-18T21:38:03+09:00</created_on>
+            <details type="array"/>
+        </journal>
+        <journal id="2510">
+            <user name="川嶋 秀一" id="1"/>
+            <notes>↑確かにそうですね。redmine以外にサーバ関連で使ってみたいものや利用したいものってありますか?</notes>
+            <created_on>2013-11-18T21:39:45+09:00</created_on>
+            <details type="array"/>
+        </journal>
+     </journals>
+</issue>
