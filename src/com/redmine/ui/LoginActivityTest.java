@@ -6,9 +6,9 @@ import android.test.ActivityUnitTestCase;
 import android.test.RenamingDelegatingContext;
 import android.widget.EditText;
 
-import com.redmine.Acount;
+import com.redmine.data.Acount;
 import com.redmine.R;
-import com.redmine.SharedDataManager;
+import com.redmine.data.SharedDataManager;
 import com.redmine.TestUtil;
 import com.redmine.database.AcountDatabaseHelper;
 import com.redmine.presenter.LoginPresenter;
@@ -70,31 +70,30 @@ public class LoginActivityTest extends ActivityUnitTestCase<LoginActivity> {
 		
 	}
 	
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		Context targetContext = getInstrumentation().getTargetContext();
 		RenamingDelegatingContext rdContext = new RenamingDelegatingContext(targetContext, "test_");
 		mMockDB = AcountDatabaseHelper.getInstance(rdContext);
-    	mMockSharedDataManager = SharedDataManager.getInstance();
+    		mMockSharedDataManager = SharedDataManager.getInstance();
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-        mMockDB.close();
-		 TestUtil.setValue((Object)mMockDB, "sSingleton", null);
-        mMockDB = null;
-        
-		 TestUtil.setValue((Object)mMockSharedDataManager, "sInstance", null);
-        mMockSharedDataManager = null;
-	}
-	
-	public void testNoAutoLogin() throws NoSuchFieldException, IllegalAccessException {
-	
-    	mMockDB.setAcount(0, "aa", "hoge", "hoge2hoge");
-    	Acount tmp = mMockDB.getAcount(0);
-    	mMockSharedDataManager.setAcount(tmp);
+		mMockDB.close();
+		TestUtil.setValue((Object)mMockDB, "sSingleton", null);
+		mMockDB = null;
 
+		TestUtil.setValue((Object)mMockSharedDataManager, "sInstance", null);
+		mMockSharedDataManager = null;
+	}
+
+	public void testNoAutoLogin() throws NoSuchFieldException, IllegalAccessException {
+	        
+		mMockDB.setAcount(0, "aa", "hoge", "hoge2hoge");
+		Acount tmp = mMockDB.getAcount(0);
+		mMockSharedDataManager.setAcount(tmp);
+	
 		MockAcountView  mockView = new MockAcountView();
 		LoginPresenter mockPresenter = new LoginPresenter(mockView, mMockDB);
 		TestUtil.setValue((Object)mockPresenter, "mSharedDataManager", mMockSharedDataManager);
@@ -139,7 +138,7 @@ public class LoginActivityTest extends ActivityUnitTestCase<LoginActivity> {
 
 	public void testAutoLogin() throws NoSuchFieldException, IllegalAccessException {
 	
-    	mMockDB.setAcount(0, "aa", "hoge", "hoge2hoge");
+    		mMockDB.setAcount(0, "aa", "hoge", "hoge2hoge");
 
 		MockAcountView  mockView = new MockAcountView();
 		LoginPresenter mockPresenter = new LoginPresenter(mockView, mMockDB);
@@ -155,11 +154,10 @@ public class LoginActivityTest extends ActivityUnitTestCase<LoginActivity> {
 		assertEquals("", passwordEditText.getText().toString());
 		boolean loginFlg = (Boolean) TestUtil.pickValue(activity, "mLoginMode");
 		assertEquals(true, loginFlg);
-
 /*
+		getInstrumentation().callActivityOnResume(activity);
 		TestUtil.setValue((Object)activity, "mAcountPresenter", mockPresenter);
 
-		getInstrumentation().callActivityOnResume(activity);
 		assertEquals("hoge", mockView.getName());
 		assertEquals("hoge2hoge", mockView.getPassword());
 		
