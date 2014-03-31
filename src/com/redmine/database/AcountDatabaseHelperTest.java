@@ -5,7 +5,7 @@ import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.test.RenamingDelegatingContext;
 
-import com.redmine.Acount;
+import com.redmine.data.Acount;
 import com.redmine.TestUtil;
 import com.redmine.database.AcountDatabaseHelper;
 
