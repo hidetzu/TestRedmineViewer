@@ -17,6 +17,7 @@ import org.apache.http.params.*;
 import org.mockito.*;
 
 import com.redmine.http.*;
+import com.redmine.http.HttpClientFactory;
 
 import android.content.*;
 import android.os.*;
@@ -33,6 +34,15 @@ public class LoginThreadTest extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
+	}
+
+
+	public class MockRequest implements Request {
+		public String result;
+
+		public String execute() {
+			return result;
+		}
 	}
 
 	public static class MockHandler extends Handler {
@@ -52,12 +62,13 @@ public class LoginThreadTest extends TestCase {
 	
 	public void testLoginOK() {
 		MockHandler mockHandler = new MockHandler();
-		
-		LoginThread target = new LoginThread(mockHandler, "test","hoge", "hoge2hoge");
-		target = spy(target);
-		doReturn("aaa").when(target).do_post((HttpClient)anyObject(),
-				(String)anyObject(), (ArrayList <NameValuePair>)anyObject());
-		doReturn("<pre id='api-access-key' class='autoscroll'>345test</pre>").when(target).do_get((HttpClient)anyObject(),(String)anyObject());
+		MockRequest mockPost    = new MockRequest();
+		MockRequest mockGet     = new MockRequest();
+
+		mockPost.result = "aaa";
+		mockGet.result  = "<pre id='api-access-key' class='autoscroll'>345test</pre>";
+
+		LoginThread target = new LoginThread(mockHandler, mockPost, mockGet);
 		target.run();
 
 		Message result = mockHandler.getMsg();
@@ -67,11 +78,13 @@ public class LoginThreadTest extends TestCase {
 
 	public void testLoginPostError() {
 		MockHandler mockHandler = new MockHandler();
+		MockRequest mockPost    = new MockRequest();
+		MockRequest mockGet     = new MockRequest();
 
-		LoginThread target = new LoginThread(mockHandler, "test","hoge", "hoge2hoge");
-		target = spy(target);
-		doReturn(null).when(target).do_post((HttpClient)anyObject(),
-				(String)anyObject(), (ArrayList <NameValuePair>)anyObject());
+		mockPost.result = null;
+		mockGet.result  = "<pre id='api-access-key' class='autoscroll'>345test</pre>";
+
+		LoginThread target = new LoginThread(mockHandler, mockPost, mockGet);
 		target.run();
 
 		Message result = mockHandler.getMsg();
@@ -80,12 +93,13 @@ public class LoginThreadTest extends TestCase {
 
 	public void testLoginGetError() {
 		MockHandler mockHandler = new MockHandler();
+		MockRequest mockPost    = new MockRequest();
+		MockRequest mockGet     = new MockRequest();
 
-		LoginThread target = new LoginThread(mockHandler, "test","hoge", "hoge2hoge");
-		target = spy(target);
-		doReturn("aaa").when(target).do_post((HttpClient)anyObject(),
-				(String)anyObject(), (ArrayList <NameValuePair>)anyObject());
-		doReturn(null).when(target).do_get((HttpClient)anyObject(),(String)anyObject());
+		mockPost.result = "aaa";
+		mockGet.result = null;
+
+		LoginThread target = new LoginThread(mockHandler, mockPost, mockGet);
 		target.run();
 
 		Message result = mockHandler.getMsg();
@@ -94,12 +108,14 @@ public class LoginThreadTest extends TestCase {
 	
 	public void testLoginUsernameOrPasswordError() {
 		MockHandler mockHandler = new MockHandler();
+		MockRequest mockPost    = new MockRequest();
+		MockRequest mockGet     = new MockRequest();
 
-		LoginThread target = new LoginThread(mockHandler, "test", "hoge", "hoge2hoge");
+		mockPost.result = "aaa";
+		mockGet.result = "aaa";
+
+		LoginThread target = new LoginThread(mockHandler, mockPost, mockGet);
 		target = spy(target);
-		doReturn("aaa").when(target).do_post((HttpClient)anyObject(),
-				(String)anyObject(), (ArrayList <NameValuePair>)anyObject());
-		doReturn("aaa").when(target).do_get((HttpClient)anyObject(),(String)anyObject());
 		target.run();
 
 		Message result = mockHandler.getMsg();
